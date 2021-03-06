@@ -1,59 +1,36 @@
 # rcj_soccer_player controller - ROBOT B1
-
-# Feel free to import built-in libraries
+# solo intenta ir al centro
 import math
 
-# You can also import scripts that you put into the folder with controller
 from rcj_soccer_robot import RCJSoccerRobot, TIME_STEP
 import utils
+import math
+center = {
+    "x": 0,
+    "y": 0,
+}
 
 
 class MyRobot(RCJSoccerRobot):
     def run(self):
+        ready = 0
         while self.robot.step(TIME_STEP) != -1:
             if self.is_new_data():
+
                 data = self.get_new_data()
-                left_speed = 0
-                right_speed = 0
-                # Get the position of our robot
                 robot_pos = data[self.name]
                 # Get the position of the ball
                 ball_pos = data['ball']
-                # Get angle between the robot and the ball
-                # and between the robot and the north
-                ball_angle, robot_angle = self.get_angles(ball_pos, robot_pos)
-                ball_to = utils.get_direction(ball_angle)
-                # print(robot_angle)
-                # print(ball_pos['y'])
-                if robot_angle < 5 and robot_angle > 4:
-                    # print('lol')
-                    if ball_to == 0:
-                        left_speed = -10
-                        right_speed = -10
-                    else:
-                        if ball_pos['x'] > robot_pos['x']+.05:
-                            fwd = 1
-                        else:
-                            fwd = -1
-                        if ball_pos['y'] > robot_pos['y']:
-                            left_speed = 7*fwd
-                            right_speed = 10*fwd
-                        else:
-                            left_speed = 10*fwd
-                            right_speed = 7*fwd
-                else:
-                    if robot_angle > 4.5:
-                        direction = -1
-                    else:
-                        direction = 1
-                    # print(direction)
-                    left_speed = 4*direction
-                    right_speed = -4*direction
 
-                # Set the speed to motors
+                ball_angle, robot_angle = self.get_angles(ball_pos, robot_pos)
+                if ball_angle > 10 and ball_angle < 350:
+                    left_speed = utils.face(ball_angle)
+                    right_speed = -utils.face(ball_angle)
+                else:
+                    left_speed = -10
+                    right_speed = -10
                 self.left_motor.setVelocity(left_speed)
                 self.right_motor.setVelocity(right_speed)
-
 
 
 my_robot = MyRobot()
