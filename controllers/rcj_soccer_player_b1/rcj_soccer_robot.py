@@ -1,7 +1,7 @@
+from controller import Robot
+from typing import Tuple
 import math
 import struct
-from typing import Tuple
-from controller import Robot
 
 TIME_STEP = 64
 ROBOT_NAMES = ["B1", "B2", "B3", "Y1", "Y2", "Y3"]
